@@ -21,10 +21,10 @@ class PlaceViewModel: ViewModel() {
 
     // 2.观察queryLiveData变化，通过switchMap函数实现将 调用仓库层获取的livedata 转换为 可观察的livedata
     val placesListLiveData: LiveData<Result<List<Place>>> = queryLiveData.switchMap { query ->
-        Repository.searchPlace(query)
+        Repository.searchPlace(query)  //！！！注意这里必须返回一个 LiveData对象，因为switchMap()方法的原理就是将转换函数中返回的livedata对象转换成可观察的livedata对象；这也是为什么仓库层searchPlaces返回的是一个LiveData对象
     }
 
-    // 3，定义placeList集合，用户对界面上显示的城市数据进行缓存！不是每次query发生变化，都要通过仓库层获取城市信息，可以在ViewModel中缓存 TODO：添加query变化读取缓存的逻辑
+    // 3，定义placeList集合，用户对界面上显示的城市数据进行缓存！不是每次query发生变化，都要通过仓库层获取城市信息，可以在ViewModel中缓存 TODO：添加query变化读取缓存的逻辑，当前逻辑是：只要query参数发生变化，就一定会触发网络请求
     private val placeList = ArrayList<Place>()
 
 }
